@@ -1,0 +1,5 @@
+Nowa gra
+Wczytaj grę
+Komendy
+Ustawienia
+Wyjście

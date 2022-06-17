@@ -1,0 +1,21 @@
+COMMANDS
+
+look around		-	opis co widzi postać
+go forward		-	idź do przodu
+back			-	cofnij się
+go left/right		-	idź w lewo/prawo\n
+go to 			-	idź do
+	temple		- 		kaplicy
+	blacksmith	-		kowala
+	tavern		-		karczmy
+	shop		-		sklepu
+come to ...		-	podejdź do ...
+talk			-	rozmawiaj
+use ...			-	użyj przedmiotu
+give ...		-	daj przedmiot
+attack			-	atakuje najbliższą postać mieczem
+defend			-	obrona przed atakiem
+dodge			-	unik
+try			-	podjęcie próby (rzut kością)
+
+Wpisz 'back' aby wrócić do menu głównego
