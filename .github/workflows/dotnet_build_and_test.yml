@@ -23,6 +23,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./Svends_tale/Svends_tale/Svends_tale.csproj
     - name: Build
-      run: dotnet build --no-restore ./Svends-tale/Svends_tale.sln   
+      run: dotnet build --no-restore
+      working-directory: ./Svends_tale
     - name: Test
       run: dotnet test --no-build --verbosity normal
