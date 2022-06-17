@@ -21,7 +21,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore ./TextAdventure/Svends_tale/Svends_tale/Svends_tale.csproj
+      run: dotnet restore ./Svends_tale/Svends_tale/Svends_tale.csproj
     - name: Build
       run: dotnet build --no-restore 
     - name: Test
