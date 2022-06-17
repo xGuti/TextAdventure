@@ -27,3 +27,4 @@ jobs:
       working-directory: ./Svends_tale
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: ./Svends_tale
