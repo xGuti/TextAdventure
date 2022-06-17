@@ -1,0 +1,17 @@
+Tło		|	Czcionka	|	Język
+
+
+
+Czarny		|	Czarny		|	English
+Niebieski	|	Niebieski	|	Polski
+Zielony		|	Zielony
+Błękit		|	Błękit
+Czarwony	|	Czarwony
+Fiolet		|	Fiolet
+Żółty		|	Żółty
+Szary		|	Szary
+		|	Biały
+
+
+Wpisz ustawienie do zmiany oraz jego wartość np.: <tło czarny>
+Wpisz 'back' aby wrócić do menu głównego

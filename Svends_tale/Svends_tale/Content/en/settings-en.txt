@@ -1,0 +1,25 @@
+Background Color
+Foreground Color
+Language
+
+Black
+Dark blue
+Dark green
+Dark cyan
+Dark red
+Dark magenta
+Yellow
+Gray
+
+White
+Black
+Blue
+Green
+Cyan
+Red
+Magenta
+Yellow
+Gray
+
+English
+Polski

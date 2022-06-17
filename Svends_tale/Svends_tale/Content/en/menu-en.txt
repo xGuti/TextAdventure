@@ -1,0 +1,5 @@
+1. New game
+2. Load game
+3. Commands
+4. Settings
+0. Exit
