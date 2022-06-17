@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,7 @@ namespace Svends_tale
 {
     
     class Menu
-    {
-        public string activePath;
-        
+    {        
         public void Run()
         {
             Console.Clear();
@@ -27,6 +26,7 @@ namespace Svends_tale
                  "\n\n");
 
             //TODO: Change static path to project path
+            
             var lines = System.Configuration.ConfigurationManager.AppSettings[$"menu-{Program.us.Language}"];
 
             Console.WriteLine("\t\t" + lines);
@@ -92,8 +92,6 @@ namespace Svends_tale
             var lines = System.Configuration.ConfigurationManager.AppSettings[$"colors-{Program.us.Language}"];
 
             Console.WriteLine(lines);
-
-
         }
 
         public void Show_Languages()
@@ -111,7 +109,7 @@ namespace Svends_tale
 
                  "\n\n");
 
-            var lines = System.Configuration.ConfigurationManager.AppSettings[$"languages"];
+            var lines = System.Configuration.ConfigurationManager.AppSettings[$"languages-{Program.us.Language}"];
 
             Console.WriteLine(lines);
         }
