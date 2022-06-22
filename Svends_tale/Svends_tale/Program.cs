@@ -8,11 +8,18 @@ namespace Svends_tale
 {
     class Program
     {
+        /// <summary>
+        /// Global object of UserSettings class
+        /// </summary>
         public static UserSettings us;
 
         static List<string> activeCommands;
-        static Menu menu;
+        static GameWindow menu;
 
+        /// <summary>
+        /// Main game loop
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             us = new UserSettings();
@@ -24,81 +31,93 @@ namespace Svends_tale
             activeCommands = new List<string>();
 
             string command = "";
-            menu = new Menu();
+            menu = new GameWindow();
 
-            do
-            {
+            while(true){
+                
                 //main menu
-                menu.Run();
+                menu.Show_Menu("menu");
                 command = Read_Command($"menu-{Program.us.Language}-commands");
 
                 //CHANGE SWITCH TO SWITCH8.0    powered by Oskar Szymański
                 switch (command.ToLower())
-                {   //new | nowa
+                {   
+                        //new | nowa
                     case string c when c.Equals(activeCommands[1]):
                         break;
-                    //load | wczytaj
+                    
+                        //load | wczytaj
                     case string c when c.Equals(activeCommands[2]):
                         break;
 
-                    //commands | komendy
+                        //commands | komendy
                     case string c when c.Equals(activeCommands[3]):
                         do
                         {
-                            menu.Show_Commands();
+                            menu.Show_Menu("commands");
                             command = Read_Command($"commands-{Program.us.Language}-commands").ToLower();
                         } while (command != activeCommands[0]);
                         break;
 
-                    //settings | ustawienia
+                        //settings | ustawienia
                     case string c when c.Equals(activeCommands[4]):
                         do
                         {
-                            menu.Show_Settings();
+                            menu.Show_Menu("settings");
                             command = Read_Command($"settings-{Program.us.Language}-commands").ToLower();
 
                             switch (command)
-                            {   //background | tło
+                            {   
+                                    //background | tło
                                 case string c2 when c2.Equals(activeCommands[1]):
-                                    Change_Setting(typeof(ConsoleColor), "ConsoleBackgroundColor");
+                                    Change_Setting("ConsoleBackgroundColor");
                                     break;
-                                //foreground | czcionka
+                                
+                                    //foreground | czcionka
                                 case string c2 when c2.Equals(activeCommands[2]):
-                                    Change_Setting(typeof(ConsoleColor), "ConsoleForegroundColor");
+                                    Change_Setting("ConsoleForegroundColor");
                                     break;
-                                //language | język
+                                
+                                    //language | język
                                 case string c2 when c2.Equals(activeCommands[3]):
-                                    Change_Setting(typeof(string), "Language");
+                                    Change_Setting("Language");
                                     break;
-                                //back | wróć
+                                
+                                    //back | wróć
                                 case string c2 when c2.Equals(activeCommands[0]):
                                     break;
 
                                 default:
                                     Console.WriteLine("E404: Command not found!");
+                                    System.Threading.Thread.Sleep(5000);
                                     break;
                             }
                             Set_Active_Commands($"settings-{Program.us.Language}-commands");
                         } while (command != activeCommands[0]);
                         break;
 
+                    case string c when c.Equals(activeCommands[0]):
+                        Environment.Exit(0);
+                        break;
+
                     default:
-                        Console.Write("Brak opcji. . .");
+                        Console.Write("E404: Command not found!");
                         System.Threading.Thread.Sleep(5000);
                         break;
                 }
-                Set_Active_Commands($"menu-{Program.us.Language}-commands");
-            } while (command != activeCommands[0]);
+            };
         }
 
-        public static void Set_Active_Commands(string usable)
+        /// <summary>
+        /// Sets commands that are active at current window. If no commands were found change language to default (English)
+        /// </summary>
+        /// <param name="window">Name of current window e.g. menu, settings, about etc.</param>
+        public static void Set_Active_Commands(string window)
         {
             activeCommands.Clear();
-            //only english works
-            //TODO: ADD -pl TO APP.CONFIG
             try
             {
-                var value = System.Configuration.ConfigurationManager.AppSettings[usable];
+                var value = System.Configuration.ConfigurationManager.AppSettings[window];
                 foreach (string v in value.Split(" "))
                     activeCommands.Add(v.ToLower());
             }
@@ -109,12 +128,16 @@ namespace Svends_tale
             }
         }
 
-        public static string Read_Command(string usable)
+        /// <summary>
+        /// Runs Set_Active_Commands(string) function and reads user input. Returns command name or 'error'
+        /// </summary>
+        /// <param name="window">Name of current window e.g. menu, settings, about etc. Only to forward to Set_Active_Commands function</param>
+        /// <returns>Command name if users input equals to any of active commands or 'error' if command was not found</returns>
+        public static string Read_Command(string window)
         {
+            Set_Active_Commands(window);
 
-            Set_Active_Commands(usable);
-
-            Console.Write(">");
+            Console.Write("> ");
             string userCommand = Console.ReadLine();
 
             if(activeCommands.Contains(userCommand))
@@ -123,48 +146,63 @@ namespace Svends_tale
             else return "error";
         }
 
-        public static void Change_Setting(Type type, string name)
+        /// <summary>
+        /// Display the appropriate window with languages list or color list
+        /// Read user input and change the settings according to the value specified by the user
+        /// Save and reload all settings
+        /// </summary>
+        /// <param name="name">Name of setting to change e.g. Language, ConsoleBackgroundColor, ConsoleForegroundColor</param>
+        public static void Change_Setting(string name)
         {
             dynamic value;
             string command;
-            if (type == typeof(ConsoleColor))
+
+            //Language settings
+            if (name.Equals("Language"))
             {
-                menu.Show_Colors();
-                command = Read_Command($"colors-{Program.us.Language}-commands");
-                value = command switch
-                {
-                    string s when s.Equals(activeCommands[1]) => ConsoleColor.Black,
-                    string s when s.Equals(activeCommands[2]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkBlue : ConsoleColor.Blue,
-                    string s when s.Equals(activeCommands[3]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkGreen : ConsoleColor.Green,
-                    string s when s.Equals(activeCommands[4]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkCyan : ConsoleColor.Cyan,
-                    string s when s.Equals(activeCommands[5]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkRed : ConsoleColor.Red,
-                    string s when s.Equals(activeCommands[6]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkMagenta : ConsoleColor.Magenta,
-                    string s when s.Equals(activeCommands[7]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkYellow : ConsoleColor.Yellow,
-                    string s when s.Equals(activeCommands[8]) => name == "ConsoleBackgroundColor" ? ConsoleColor.DarkGray : ConsoleColor.Gray,
-                    string s when s.Equals(activeCommands[9]) => ConsoleColor.White,
-                    _ => name== "ConsoleBackgroundColor" ? us.ConsoleBackgroundColor : us.ConsoleForegroundColor
-                };
-            }
-            else
-            {
-                menu.Show_Languages();
+                menu.Show_Menu("languages");
                 command = Read_Command($"languages-commands");
                 value = command switch
                 {
                     "english" => "en",
                     "polski" => "pl",
-                    _=> us.Language
+                    _ => us.Language
+                };
+            }
+            //Colors settings
+            else
+            {
+                menu.Show_Menu("colors");
+                command = Read_Command($"colors-{Program.us.Language}-commands");
+                value = command switch
+                {
+                    string s when s.Equals(activeCommands[1]) => ConsoleColor.Black,
+                    string s when s.Equals(activeCommands[2]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkBlue : ConsoleColor.Blue,
+                    string s when s.Equals(activeCommands[3]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkGreen : ConsoleColor.Green,
+                    string s when s.Equals(activeCommands[4]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkCyan : ConsoleColor.Cyan,
+                    string s when s.Equals(activeCommands[5]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkRed : ConsoleColor.Red,
+                    string s when s.Equals(activeCommands[6]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkMagenta : ConsoleColor.Magenta,
+                    string s when s.Equals(activeCommands[7]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkYellow : ConsoleColor.Yellow,
+                    string s when s.Equals(activeCommands[8]) => name.Equals("ConsoleBackgroundColor") ? ConsoleColor.DarkGray : ConsoleColor.Gray,
+                    string s when s.Equals(activeCommands[9]) => ConsoleColor.White,
+                    _ => name == "ConsoleBackgroundColor" ? us.ConsoleBackgroundColor : us.ConsoleForegroundColor
                 };
             }
 
-            us.ConsoleBackgroundColor = name == "ConsoleBackgroundColor" ? value : us.ConsoleBackgroundColor;
-            us.ConsoleForegroundColor = name == "ConsoleForegroundColor" ? value : us.ConsoleForegroundColor;
-            us.Language = name == "Language" ? value : us.Language;
+            //Save all user settings
+            us.ConsoleBackgroundColor = name.Equals("ConsoleBackgroundColor") ? value : us.ConsoleBackgroundColor;
+            us.ConsoleForegroundColor = name.Equals("ConsoleForegroundColor") ? value : us.ConsoleForegroundColor;
+            us.Language = name.Equals("Language") ? value : us.Language;
 
             us.Save();
+
+            //Reload changes
             Load_User_Settings();
         }
 
+        /// <summary>
+        /// Sets console view
+        /// </summary>
         static void Load_User_Settings()
         {
             Console.BackgroundColor = us.ConsoleBackgroundColor;
