@@ -14,9 +14,9 @@ Text adventure game made in C#. The game is based on a simplified D&D system. Du
 
 # Tasks
  - Write story script
- - Create settings
- - Create commands system
- - Create dice roll system
+ - Create settings :heavy_check_mark:
+ - Create commands system :heavy_check_mark:
+ - Create dice roll system :heavy_check_mark:
  - Prepare "NPCs"
  - Create win-loose conditions
  - Tests
